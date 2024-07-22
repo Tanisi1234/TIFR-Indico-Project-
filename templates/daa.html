@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar of Events: Print to File</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/daa.css">
+    <style>
+        @media print {
+            .btn, .print-btn {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        function printDiv(divID) {
+            var divElements = document.getElementById(divID).innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML =
+                "<html><head><title>Print</title></head><body>" + divElements + "</body></html>";
+            window.print();
+            document.body.innerHTML = oldPage;
+            attachListener();
+        }
+
+        function attachListener() {
+            const val = document.querySelector(".inbody");
+            const zoomin = document.querySelector(".btn.zoom-in");
+            const zoomout = document.querySelector(".btn.zoom-out");
+
+            function zoom_in() {
+                const fonsi = window.getComputedStyle(val, null).getPropertyValue("font-size");
+                const currentSize = parseFloat(fonsi);
+                val.style.fontSize = currentSize + 1 + "px";
+            }
+
+            if (zoomin) {
+                zoomin.addEventListener("click", zoom_in);
+            }
+
+            function zoom_out() {
+                const fonsi = window.getComputedStyle(val, null).getPropertyValue("font-size");
+                const currentSize = parseFloat(fonsi);
+                val.style.fontSize = currentSize - 1 + "px";
+            }
+
+            if (zoomout) {
+                zoomout.addEventListener("click", zoom_out);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", attachListener);
+    </script>
+</head>
+<body>
+  
+    <div class="mainbody">
+      &nbsp;
+      &nbsp;
+
+      <input type="button" class="print-btn" value="Print All Events" onclick="printDiv('printablediv')" />
+  <button type="button" class="btn zoom-in">Increase Size</button>
+  <button type="button" class="btn zoom-out">Decrease Size</button>
+  &nbsp;
+  &nbsp;
+        
+
+        <div id="printablediv">
+            <div class="inbody">
+                <div class="header">
+                    <h1>टाटा मूलभूत अनुसंधान संस्थान<br />Tata Institute of Fundamental Research</h1>
+                </div>
+                <hr />
+                <h2>DAA Colloquium</h2>
+                {% if events_data %}
+                    <ul>
+                        {% for event in events_data %}
+                            <li>
+                                <div id="event-{{ loop.index }}">
+                                    <h3>{{ event.Title }}</h3>
+                                    <p><strong>Start Date:</strong> {{ event["Start Date"] }}</p>
+                                    <p><strong>End Date:</strong> {{ event["End Date"] }}</p>
+                                    <p><strong>Location:</strong> {{ event.Location }}</p>
+                                    <p><strong>Description:</strong> {{ event.Description }}</p>
+                                    <p><a href="{{ event.URL }}">More Info</a></p>
+                                    <input type="button" class="print-btn" value="Print This Event" onclick="printDiv('event-{{ loop.index }}')" />
+                                    <hr />
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No events available.</p>
+                {% endif %}
+                <h5>( Dr. Satyanarayana Bheesette )</h5>
+            </div>
+        </div>
+
+      
+    </div>
+</body>
+</html>

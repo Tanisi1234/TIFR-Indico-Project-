@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Calendar of Events: Print to File</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/generic.css">
+    <style>
+        /* General Styles */
+        /* General Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.hidden {
+    display: none;
+}
+.event-card {
+    max-width: 800px; /* Adjust width as needed */
+    margin: auto; /* Center the card */
+}
+.event-icon {
+    color: blue; /* Change icon color to blue */
+}
+.btn-custom-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+   
+}
+.btn-custom-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+.btn-custom-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    font-style: italic;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+.btn-custom-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+.department-icon {
+    width: 50px; /* Adjust size as needed */
+    height: 50px;
+    margin-right: 10px;
+}
+.department-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+}
+
+h2 {
+    color: white;
+}
+
+
+.header {
+    background-color: #6D5ACF;
+    color: white;
+    padding: 25px;
+    text-align: center;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
+.header h1, .header h2 {
+    margin: 0;
+}
+
+.nav-menu {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #6D5ACF;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.nav-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+.nav-menu ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-menu ul li a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    display: flex;
+    margin-top: 20px;
+}
+
+.calendar {
+    width: 200px;
+    height: 200px;
+    font-size: 0.8em;
+    margin-right: 20px;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.custom-title {
+    background-color: #ddd;
+    color: black;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.custom-title:hover {
+    background-color: #ccc;
+}
+
+.event-content {
+    display: none;
+    background-color: #eee;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.event-item {
+    margin-bottom: 20px; /* Add space between events */
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd; /* Optional: Add a line separating events */
+}
+
+.event-details {
+    margin-bottom: 10px; /* Space between title and other details */
+    
+}
+
+.event-details p {
+    margin: 10px 0; /* Space between each detail line */
+}
+
+.icon {
+    color: blue; /* Make icons blue */
+}
+
+.event-content.show {
+    display: block;
+}
+
+hr {
+    border: 1px solid white;
+}
+h4{
+    color: white;
+}
+.no-events {
+    color: black;
+    font-size: 1em;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
+/* Calendar Styles */
+.calendar {
+    width: 200px;
+    height: 200px;
+    font-size: 0.8em;
+}
+
+.month {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #6D5ACF;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.month ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.month ul li {
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 5px;
+}
+
+.month .prev, .month .next {
+    cursor: pointer;
+}
+
+.weekdays {
+    margin: 0;
+    padding: 5px 0;
+    background-color: #ddd;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.weekdays li {
+    flex: 1;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.days {
+    padding: 5px 0;
+    background: #eee;
+    margin: 0;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.days li {
+    list-style-type: none;
+    width: 14.28%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #777;
+    cursor: pointer;
+}
+
+.days li:hover {
+    background: #ddd;
+    color: #6D5ACF; /* Cursor color change */
+}
+
+.days .today {
+    color: white;
+    background: #187bcd;
+    border-radius: 50%;
+}
+
+    </style>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleButtons = document.querySelectorAll('.custom-title');
+
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('show');
+                });
+            });
+
+            // Calendar functionality
+            const today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            function renderCalendar(month, year) {
+                const firstDay = (new Date(year, month)).getDay();
+                const daysInMonth = 32 - new Date(year, month, 32).getDate();
+                const calendar = document.querySelector('.days');
+                const monthYear = document.querySelector('.month ul li span');
+
+                monthYear.innerHTML = months[month] + "<br>" + year;
+
+                calendar.innerHTML = "";
+                let date = 1;
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        if (i === 0 && j < firstDay) {
+                            calendar.innerHTML += "<li></li>";
+                        } else if (date > daysInMonth) {
+                            break;
+                        } else {
+                            calendar.innerHTML += `<li${date === today.getDate() && month === today.getMonth() && year === today.getFullYear() ? ' class="today"' : ''}>${date}</li>`;
+                            date++;
+                        }
+                    }
+                }
+            }
+
+            function prevMonth() {
+                currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+                currentYear = (currentMonth === 11) ? currentYear - 1 : currentYear;
+                renderCalendar(currentMonth, currentYear);
+            }
+
+            function nextMonth() {
+                currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+                currentYear = (currentMonth === 0) ? currentYear + 1 : currentYear;
+                renderCalendar(currentMonth, currentYear);
+            }
+
+            document.querySelector('.prev').addEventListener('click', prevMonth);
+            document.querySelector('.next').addEventListener('click', nextMonth);
+
+            renderCalendar(currentMonth, currentYear);
+        });
+      
+            function toggleEvents() {
+                const hiddenItems = document.querySelectorAll('.event-item.hidden');
+                const toggleButton = document.getElementById('toggleButton');
+                hiddenItems.forEach(item => {
+                    item.classList.toggle('hidden');
+                });
+                if (toggleButton.innerText === "Show All Events") {
+                    toggleButton.innerText = "Show Less";
+                } else {
+                    toggleButton.innerText = "Show All Events";
+                }
+            }
+    
+            function subscribe() {
+                // Add your subscription logic here
+                alert("Subscribed to event notifications!");
+            }
+        
+    </script>
+</head>
+<body>
+    <div id="printablediv">
+        <div class="header">
+            <div class="nav-menu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                
+            </div>
+            <h4 color="white">टाटा मूलभूत अनुसंधान संस्थान<br />Tata Institute of Fundamental Research INDICO PROJECT</h4>
+        </div>
+        <hr>
+        
+        <div class="container">
+            <div class="calendar">
+                &nbsp;  &nbsp;<h3 align="center"> Calendar View</h3>
+                <div class="month">
+                    <ul>
+                        <li class="prev">&#10094;</li>
+                        <li class="next">&#10095;</li>
+                        <li><span></span></li>
+                    </ul>
+                </div>
+                <ul class="weekdays">
+                    <li>Sun</li>
+                    <li>Mon</li>
+                    <li>Tue</li>
+                    <li>Wed</li>
+                    <li>Thu</li>
+                    <li>Fri</li>
+                    <li>Sat</li>
+                </ul>
+                <ul class="days"></ul>
+            </div>
+            
+            <div class="content">
+                <div class="column">
+                    <h3 color="black">Upcoming Events</h3>
+                    <div class="custom-title">Seminar Talks</div>
+                    <div class="event-content">
+                        {% if conference_events %}
+                            <ul>
+                                {% for event in conference_events %}
+                                    <li class="event-item {% if loop.index != 1 %}hidden{% endif %}">
+                                        <div class="card event-card mb-3">
+                                            <div class="card-body">
+                                                <!-- Event Title -->
+                                                <h5 class="card-title"><strong>{{ event["Title"] }}</strong></h5>
+                                        
+                                                <!-- Event Date and Time -->
+                                                <p class="card-text">
+                                                    <i class="fas fa-calendar-alt event-icon"></i> {{ event["Start Date"] }}
+                                                    <span style="margin: 0 20px;"></span>
+                                                    <i class="fas fa-clock event-icon"></i> {{ event["Start Timezone"] }}
+                                                </p>
+                                        
+                                                <!-- Event Speaker and Category -->
+                                                <p class="card-text">
+                                                    <i class="fas fa-microphone event-icon"></i> {{ event["Speaker"] }}
+                                                    <span style="margin: 0 20px;"></span>
+                                                    <i class="fas fa-hourglass event-icon"></i> {{ event["Category ID"] }}
+                                                </p>
+                                        
+                                                <!-- Event Affiliation -->
+                                                <p class="card-text">
+                                                    <i class="fas fa-university event-icon"></i> {{ event["Affiliation"] }}
+                                                </p>
+                                            </div>
+                                        </div>
+        
+                                        <div class="container mt-5">
+                                            <form method="post" action="/process_form">
+                                                <input type="hidden" name="category_number" value="{{ event['Category ID'] }}">
+                                                <input type="hidden" name="start_date" value="{{ event['Start Date'] }}">
+                                                <input type="hidden" name="end_date" value="{{ event['End Date'] }}">
+        
+                                                <div class="form-row align-items-center">
+                                                    <div class="col-auto">
+                                                        <label for="viewSelect" class="form-label mr-2"><strong>Select Layout:</strong></label>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <select id="viewSelect" name="view" class="form-control form-control-sm">
+                                                            <option value="generic.html" selected>Generic Notice Layout</option>
+                                                            <option value="daa.html">DAA Notice Layout</option>
+                                                            <option value="dbs.html">DBS Notice Layout</option>
+                                                            <option value="dcs.html">DCS Notice Layout</option>
+                                                            <option value="dcmp.html">DCMP Notice Layout</option>
+                                                            <option value="dhep.html">DHEP Notice Layout</option>
+                                                            <option value="dnap.html">DNAP Notice Layout</option>
+                                                            <option value="dtp.html">DTP Notice Layout</option>
+                                                            <option value="stcs.html">STCS Notice Layout</option>
+                                                            <option value="wednesdaytalks.html">Wednesday Colloquium Notice Layout</option>
+                                                            <option value="aset.html">ASET Colloquium Notice Layout</option>
+                                                            <option value="testDAA.html">Demo Notice Layout</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <button type="submit" class="btn btn-primary">Events</button>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <a href="/register" class="btn btn-success">Subscribe</a>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="text-center mt-4">
+                                <button id="toggleButton" class="btn btn-info" onclick="toggleEvents()">Show All Events</button>
+                            </div>
+                        {% else %}
+                            <p>No conference events available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+                
+               
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
