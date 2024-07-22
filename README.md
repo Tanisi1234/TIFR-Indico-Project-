@@ -79,6 +79,8 @@ The Flask application reads the stored events from the database and displays the
 
 
 ![Screenshot of the Interface](static/screenshots/Screenshot%202024-07-22%20164204.png)
-Registeration Form
+# Registeration Form
 ![Screenshot of the Interface](static/screenshots/Screenshot%202024-07-22%20164311.png)
+# Generic colloquium
+![Screenshot of the Interface](static/screenshots/Screenshot%202024-07-22%20182459.png)
 
